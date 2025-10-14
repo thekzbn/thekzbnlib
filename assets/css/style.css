@@ -9,6 +9,16 @@
   --gap: 16px;
 }
 
+[data-theme="light"] {
+  --bg-color: #fff;
+  --text-color: #000;
+  --accent-color: #d6ad60;
+  --input-bg: #fff;
+  --input-text: #000;
+  --border-color: #d6ad60;
+  --muted: #666;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -93,6 +103,21 @@ body {
   font-weight: 500;
 }
 
+.icon-btn:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border-color: var(--accent-color);
+}
+
+.theme-toggle {
+  background: var(--bg-color);
+  color: var(--accent-color);
+}
+
+.theme-toggle .material-symbols-outlined {
+  font-size: 24px;
+}
+
 /* search */
 .search {
   display: flex;
@@ -112,7 +137,13 @@ body {
 }
 
 .search input::placeholder {
-  color: #666;
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.search input:focus {
+  border-color: var(--accent-color);
+  outline: none;
 }
 
 .search select {
@@ -121,6 +152,17 @@ body {
   color: var(--input-text);
   border: 2px solid var(--border-color);
   font-weight: 500;
+  cursor: pointer;
+}
+
+.search select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.search select option {
+  background: var(--input-bg);
+  color: var(--input-text);
 }
 
 /* breadcrumb */
@@ -245,22 +287,117 @@ body {
 }
 
 /* responsive */
-@media (max-width:720px) {
+@media (max-width: 768px) {
   .app {
     padding: 14px;
+    margin: 14px auto;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
   }
 
   .brand-title {
-    font-size: 22px;
+    font-size: 24px;
   }
 
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
+  .brand-sub {
+    font-size: 13px;
+  }
+
+  .controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .icon-btn {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .icon-btn span,
+  .icon-btn i {
+    font-size: 20px;
+  }
+
+  .search {
+    flex-direction: column;
     gap: 10px;
   }
 
-  .search input {
+  .search input,
+  .search select {
+    width: 100%;
     font-size: 15px;
     padding: 10px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .card {
+    padding: 12px;
+    min-height: 90px;
+  }
+
+  .card-icon {
+    font-size: 22px;
+  }
+
+  .card-title {
+    font-size: 14px;
+  }
+
+  .card-meta {
+    font-size: 12px;
+  }
+
+  .modal {
+    width: 98%;
+    height: 90%;
+  }
+
+  .breadcrumb {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    margin-bottom: 14px;
+  }
+
+  .brand-title {
+    font-size: 20px;
+  }
+
+  .brand-sub {
+    font-size: 12px;
+  }
+
+  .icon-btn {
+    padding: 6px;
+    font-size: 13px;
+    gap: 4px;
+  }
+
+  .icon-btn span,
+  .icon-btn i {
+    font-size: 18px;
+  }
+
+  .footer {
+    font-size: 12px;
+    margin: 20px auto 40px;
   }
 }
