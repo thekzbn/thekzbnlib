@@ -152,19 +152,19 @@ homeBtn.addEventListener('click', () => {
 });
 /* Theme toggle */
 function initTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'dark';
+  const savedTheme = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeIcon(savedTheme);
 }
 
 function updateThemeIcon(theme) {
   const icon = themeToggle.querySelector('.material-symbols-outlined');
-  icon.textContent = theme === 'light' ? 'light_mode' : 'dark_mode';
+  icon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
 }
 
 themeToggle.addEventListener('click', () => {
   const currentTheme = document.documentElement.getAttribute('data-theme');
-  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', newTheme);
   localStorage.setItem('theme', newTheme);
   updateThemeIcon(newTheme);
