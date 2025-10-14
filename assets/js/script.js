@@ -1,11 +1,7 @@
-/*
-Drive Library client (flat, nested explorer)
-Replace YOUR_API_KEY_HERE with your Google API key (Drive API enabled).
-ROOT_FOLDER_ID is set to your public folder id.
-*/
-const API_KEY = 'AIzaSyAW-YCKn5Rx7TgweJZpIFgrYrx4GzlypX0'; // <-- REPLACE with your API key
-const ROOT_FOLDER_ID = '1XyX4sAV74Duxtz1KijjXL0IuBFemOMFe'; // your folder
-// UI refs
+
+const API_KEY = 'AIzaSyAW-YCKn5Rx7TgweJZpIFgrYrx4GzlypX0';
+const ROOT_FOLDER_ID = '1XyX4sAV74Duxtz1KijjXL0IuBFemOMFe';
+
 const grid = document.getElementById('grid');
 const breadcrumb = document.getElementById('breadcrumb');
 const btnUp = document.getElementById('btnUp');
@@ -23,8 +19,8 @@ let pathStack = [{
   id: ROOT_FOLDER_ID,
   name: 'Library'
 }];
-let allFilesCache = []; // currently loaded items for this folder
-/* Utility: fetch folder contents (handles pagination) */
+let allFilesCache = [];
+
 async function fetchFolderContents(folderId) {
   if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE') {
     console.error('Missing API key. Replace API_KEY constant.');
@@ -52,7 +48,7 @@ async function fetchFolderContents(folderId) {
     return [];
   }
 }
-/* Render breadcrumb */
+
 function renderBreadcrumb() {
   breadcrumb.innerHTML = '';
   pathStack.forEach((p, i) => {
@@ -73,11 +69,11 @@ function renderBreadcrumb() {
   });
   btnUp.disabled = pathStack.length <= 1;
 }
-/* Render items into grid */
+
 function renderItems(items, skipCache = false) {
   grid.innerHTML = '';
   if (!skipCache) {
-    allFilesCache = items.slice(); // store for search & sort
+    allFilesCache = items.slice();
   }
   if (!items || !items.length) {
     empty.style.display = 'block';
@@ -85,7 +81,7 @@ function renderItems(items, skipCache = false) {
   } else {
     empty.style.display = 'none';
   }
-  // folders first
+
   const folders = items.filter(i => i.mimeType === 'application/vnd.google-apps.folder');
   const files = items.filter(i => i.mimeType !== 'application/vnd.google-apps.folder');
   folders.forEach(f => {
@@ -126,12 +122,12 @@ function renderItems(items, skipCache = false) {
     grid.appendChild(card);
   });
 }
-/* Navigation helpers */
+
 async function goToCurrent() {
   const current = pathStack[pathStack.length - 1];
   renderBreadcrumb();
   const items = await fetchFolderContents(current.id);
-  // Sort by name by default
+
   const sortedItems = items.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
   renderItems(sortedItems);
 }
@@ -154,7 +150,7 @@ homeBtn.addEventListener('click', () => {
   }];
   goToCurrent();
 });
-/* Theme toggle */
+
 function initTheme() {
   const savedTheme = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
@@ -174,7 +170,7 @@ themeToggle.addEventListener('click', () => {
   updateThemeIcon(newTheme);
 });
 
-/* search & sort */
+
 searchInput.addEventListener('input', debounce(() => applyFilters(), 220));
 sortSelect.addEventListener('change', () => applyFilters());
 
@@ -189,9 +185,9 @@ function applyFilters() {
   if (sortBy === 'modifiedTime') items.sort((a, b) => (b.modifiedTime || '').localeCompare(a.modifiedTime || ''));
   renderItems(items, true);
 }
-/* Preview modal (uses Drive viewer) */
+
 function openPreview(file) {
-  // Use Google Drive viewer which works better for PDFs
+
   const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(`https://drive.google.com/uc?export=download&id=${file.id}`)}&embedded=true`;
   previewFrame.src = viewerUrl;
   modalTitle.textContent = file.name;
@@ -209,7 +205,7 @@ closeModalBtn.addEventListener('click', closeModal);
 backdrop.addEventListener('click', (e) => {
   if (e.target === backdrop) closeModal();
 });
-/* small util: escape HTML for titles */
+
 function escapeHtml(s) {
   return (s || '').replace(/[&<>"']/g, c => ({
     '&': '&amp;',
@@ -217,9 +213,9 @@ function escapeHtml(s) {
     '>': '&gt;',
     '"': '&quot;',
     "'": '&#39;'
-  } [c]));
+  }[c]));
 }
-/* debounce */
+
 function debounce(fn, wait = 150) {
   let t;
   return (...a) => {
@@ -227,6 +223,6 @@ function debounce(fn, wait = 150) {
     t = setTimeout(() => fn.apply(this, a), wait);
   }
 }
-/* init */
+
 initTheme();
 goToCurrent();

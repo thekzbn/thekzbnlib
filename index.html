@@ -6,16 +6,18 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<title>@thekzbn Library</title>
 
-	<!-- Fonts & Icons -->
-	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+	<link
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+		rel="stylesheet">
 	<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
 
 	<div class="app" role="application" aria-label="@thekzbn Library App">
-		<!-- header -->
+
 		<div class="header">
 			<div class="brand">
 				<img src="https://thekzbn.name.ng/assets/img/logo.png" alt="Logo" class="brand-logo">
@@ -29,26 +31,29 @@
 				<button id="themeToggle" class="icon-btn theme-toggle" title="Toggle theme">
 					<span class="material-symbols-outlined">dark_mode</span>
 				</button>
-				<button id="btnUp" class="icon-btn" title="Go up"><span class="material-symbols-outlined">arrow_upward</span>Up</button>
-				<button id="homeBtn" class="icon-btn secondary" title="Go to Library root"><i class='bx bx-home'></i>Home</button>
+				<button id="btnUp" class="icon-btn" title="Go up"><span
+						class="material-symbols-outlined">arrow_upward</span>Up</button>
+				<button id="homeBtn" class="icon-btn secondary" title="Go to Library root"><i
+						class='bx bx-home'></i>Home</button>
 			</div>
 		</div>
 
-		<!-- search + options -->
+
 		<div class="search" role="search" aria-label="Search files">
-			<input id="searchInput" type="search" placeholder="Search titles, authors, types..." aria-label="Search files">
+			<input id="searchInput" type="search" placeholder="Search titles, authors, types..."
+				aria-label="Search files">
 			<select id="sortSelect" aria-label="Sort files">
 				<option value="name">Sort: Name</option>
 				<option value="modifiedTime">Sort: Newest</option>
 			</select>
 		</div>
 
-		<!-- breadcrumb -->
+
 		<div id="breadcrumb" class="breadcrumb" aria-hidden="false">
 			<span class="crumb" data-index="0">Library</span>
 		</div>
 
-		<!-- grid -->
+
 		<div id="grid" class="grid" aria-live="polite"></div>
 
 		<div id="empty" class="empty" style="display:none;">No items found.</div>
@@ -56,21 +61,24 @@
 		<div class="footer">© 2025 @thekzbn — Drive Library</div>
 	</div>
 
-	<!-- modal preview -->
+
 	<div id="backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
 		<div class="modal" role="document">
 			<header>
 				<div id="modalTitle" style="font-weight:600;"></div>
 				<div style="display:flex;align-items:center;gap:10px;">
-					<a id="openInDrive" href="#" target="_blank" rel="noopener" style="color:var(--muted); font-weight:500; font-size:14px; text-decoration:none;">Open in Drive</a>
-					<button id="closeModal" class="icon-btn" aria-label="Close preview"><span class="material-symbols-outlined">close</span></button>
+					<a id="openInDrive" href="#" target="_blank" rel="noopener"
+						style="color:var(--muted); font-weight:500; font-size:14px; text-decoration:none;">Open in
+						Drive</a>
+					<button id="closeModal" class="icon-btn" aria-label="Close preview"><span
+							class="material-symbols-outlined">close</span></button>
 				</div>
 			</header>
 			<iframe id="previewFrame" title="Preview"></iframe>
 		</div>
 	</div>
 
-<script src="assets/js/script.js"></script>
+	<script src="assets/js/script.js"></script>
 </body>
 
 </html>
