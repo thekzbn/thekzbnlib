@@ -40,7 +40,9 @@ To test locally, you can:
 3. Generate a restricted API key (for example, allow `http://localhost/*`)  
 4. Replace the placeholder in `assets/js/script.js`:
 
-   ```const API_KEY = 'REPLACE_WITH_YOUR_KEY';```
+   ```js
+   const API_KEY = 'REPLACE_WITH_YOUR_KEY';
+   ```
 
 This will enable limited testing with your own Drive data.
 
