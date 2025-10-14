@@ -18,6 +18,7 @@ const previewFrame = document.getElementById('previewFrame');
 const modalTitle = document.getElementById('modalTitle');
 const openInDrive = document.getElementById('openInDrive');
 const closeModalBtn = document.getElementById('closeModal');
+const themeToggle = document.getElementById('themeToggle');
 let pathStack = [{
   id: ROOT_FOLDER_ID,
   name: 'Library'
@@ -149,6 +150,26 @@ homeBtn.addEventListener('click', () => {
   }];
   goToCurrent();
 });
+/* Theme toggle */
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeIcon(savedTheme);
+}
+
+function updateThemeIcon(theme) {
+  const icon = themeToggle.querySelector('.material-symbols-outlined');
+  icon.textContent = theme === 'light' ? 'light_mode' : 'dark_mode';
+}
+
+themeToggle.addEventListener('click', () => {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  updateThemeIcon(newTheme);
+});
+
 /* search & sort */
 searchInput.addEventListener('input', debounce(() => applyFilters(), 220));
 sortSelect.addEventListener('change', () => applyFilters());
@@ -201,4 +222,5 @@ function debounce(fn, wait = 150) {
   }
 }
 /* init */
+initTheme();
 goToCurrent();
