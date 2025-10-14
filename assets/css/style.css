@@ -14,7 +14,7 @@
   margin: 0;
   padding: 0;
   transition: all .5s cubic-bezier(.57, -.01, .21, .89);
-  font-family: "Inter Tight", "Inter", "Poppins", "Space Grotesk", sans-serif
+  font-family: "Inter Tight", "Inter", "Poppins", "Space Grotesk", sans-serif;
 }
 
 html,
