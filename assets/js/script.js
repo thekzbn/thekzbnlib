@@ -74,9 +74,11 @@ function renderBreadcrumb() {
   btnUp.disabled = pathStack.length <= 1;
 }
 /* Render items into grid */
-function renderItems(items) {
+function renderItems(items, skipCache = false) {
   grid.innerHTML = '';
-  allFilesCache = items.slice(); // store for search & sort
+  if (!skipCache) {
+    allFilesCache = items.slice(); // store for search & sort
+  }
   if (!items || !items.length) {
     empty.style.display = 'block';
     return;
@@ -129,7 +131,9 @@ async function goToCurrent() {
   const current = pathStack[pathStack.length - 1];
   renderBreadcrumb();
   const items = await fetchFolderContents(current.id);
-  renderItems(items);
+  // Sort by name by default
+  const sortedItems = items.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  renderItems(sortedItems);
 }
 
 function jumpTo(index) {
@@ -183,11 +187,13 @@ function applyFilters() {
   const sortBy = sortSelect.value;
   if (sortBy === 'name') items.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
   if (sortBy === 'modifiedTime') items.sort((a, b) => (b.modifiedTime || '').localeCompare(a.modifiedTime || ''));
-  renderItems(items);
+  renderItems(items, true);
 }
-/* Preview modal (uses Drive preview) */
+/* Preview modal (uses Drive viewer) */
 function openPreview(file) {
-  previewFrame.src = `https://drive.google.com/file/d/${file.id}/preview`;
+  // Use Google Drive viewer which works better for PDFs
+  const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(`https://drive.google.com/uc?export=download&id=${file.id}`)}&embedded=true`;
+  previewFrame.src = viewerUrl;
   modalTitle.textContent = file.name;
   openInDrive.href = file.webViewLink || `https://drive.google.com/file/d/${file.id}/view`;
   backdrop.style.display = 'flex';
