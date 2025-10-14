@@ -1,0 +1,266 @@
+:root {
+  --bg-color: #000;
+  --text-color: #fff;
+  --accent-color: #d6ad60;
+  --input-bg: #0b0b0b;
+  --input-text: #fff;
+  --border-color: #d6ad60;
+  --muted: #9aa3b2;
+  --gap: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: all .5s cubic-bezier(.57, -.01, .21, .89);
+  font-family: "Inter Tight", "Inter", "Poppins", "Space Grotesk", sans-serif
+}
+
+html,
+body {
+  height: 100%
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* layout */
+.app {
+  width: 100%;
+  max-width: 1100px;
+  margin: 28px auto;
+  padding: 20px;
+}
+
+/* header */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap);
+  margin-bottom: 20px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.brand-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--accent-color);
+  letter-spacing: 0.2px;
+}
+
+.brand-sub {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+  font-family: 'Space Grotesk', monospace;
+}
+
+/* top controls */
+.controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.icon-btn {
+  background: transparent;
+  border: 2px solid transparent;
+  color: var(--text-color);
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn.secondary {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* search */
+.search {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0;
+  align-items: center;
+}
+
+.search input {
+  flex: 1;
+  padding: 12px 14px;
+  background: var(--input-bg);
+  color: var(--input-text);
+  border: 2px solid var(--border-color);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.search input::placeholder {
+  color: #666;
+}
+
+.search select {
+  padding: 10px;
+  background: var(--input-bg);
+  color: var(--input-text);
+  border: 2px solid var(--border-color);
+  font-weight: 500;
+}
+
+/* breadcrumb */
+.breadcrumb {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.breadcrumb .crumb {
+  color: var(--accent-color);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.sep {
+  color: var(--muted)
+}
+
+/* grid (cards are rectangular: NO radius, NO shadow) */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  background: transparent;
+  /* keep it clean */
+  border: 2px solid rgba(255, 255, 255, 0.03);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  min-height: 110px;
+  justify-content: space-between;
+  cursor: pointer;
+  /* NO border-radius; NO box-shadow; NO glow */
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.01);
+  transform: translateY(-2px);
+  /* subtle movement only (matches weather) */
+}
+
+/* icons & text */
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-icon {
+  font-size: 24px;
+  color: var(--accent-color);
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.card-meta {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* empty */
+.empty {
+  margin-top: 40px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 15px;
+}
+
+/* modal (preview uses Google Drive preview) - rectangular too */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1200;
+}
+
+.modal {
+  width: 92%;
+  height: 84%;
+  background: var(--input-bg);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid rgba(255, 255, 255, 0.04);
+  /* NO radius/shadow */
+}
+
+.modal header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.02);
+}
+
+.modal iframe {
+  flex: 1;
+  border: 0;
+  width: 100%;
+}
+
+/* footer */
+.footer {
+  margin: 28px auto 60px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* responsive */
+@media (max-width:720px) {
+  .app {
+    padding: 14px;
+  }
+
+  .brand-title {
+    font-size: 22px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .search input {
+    font-size: 15px;
+    padding: 10px;
+  }
+}
