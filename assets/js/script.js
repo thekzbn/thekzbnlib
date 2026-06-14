@@ -15,9 +15,10 @@ const modalTitle = document.getElementById('modalTitle');
 const openInDrive = document.getElementById('openInDrive');
 const closeModalBtn = document.getElementById('closeModal');
 const themeToggle = document.getElementById('themeToggle');
+const libraryStatus = document.getElementById('libraryStatus');
 let pathStack = [{
   id: ROOT_FOLDER_ID,
-  name: 'Library'
+  name: 'library'
 }];
 let allFilesCache = [];
 
@@ -52,14 +53,15 @@ async function fetchFolderContents(folderId) {
 function renderBreadcrumb() {
   breadcrumb.innerHTML = '';
   pathStack.forEach((p, i) => {
-    const span = document.createElement('span');
-    span.className = 'crumb';
-    span.textContent = p.name;
-    span.dataset.index = i;
-    span.addEventListener('click', () => {
+    const crumb = document.createElement('button');
+    crumb.className = 'crumb';
+    crumb.type = 'button';
+    crumb.textContent = p.name;
+    crumb.dataset.index = i;
+    crumb.addEventListener('click', () => {
       jumpTo(i);
     });
-    breadcrumb.appendChild(span);
+    breadcrumb.appendChild(crumb);
     if (i < pathStack.length - 1) {
       const sep = document.createElement('span');
       sep.className = 'sep';
@@ -76,26 +78,33 @@ function renderItems(items, skipCache = false) {
     allFilesCache = items.slice();
   }
   if (!items || !items.length) {
-    empty.style.display = 'block';
+    empty.hidden = false;
+    updateLibraryStatus(0);
     return;
   } else {
-    empty.style.display = 'none';
+    empty.hidden = true;
   }
+  updateLibraryStatus(items.length);
 
   const folders = items.filter(i => i.mimeType === 'application/vnd.google-apps.folder');
   const files = items.filter(i => i.mimeType !== 'application/vnd.google-apps.folder');
+  
+  let cardIdx = 1;
+
   folders.forEach(f => {
-    const card = document.createElement('div');
+    const card = document.createElement('button');
     card.className = 'card';
+    card.type = 'button';
     card.innerHTML = `
-  <div class="card-top">
-    <div class="card-icon"><i class='bx bx-folder'></i></div>
-    <div>
-      <div class="card-title">${escapeHtml(f.name)}</div>
-      <div class="card-meta">Folder</div>
-    </div>
-  </div>
-`;
+      <div class="card-left">
+        <span class="card-index">${String(cardIdx++).padStart(2, '0')}</span>
+        <span class="card-icon"><i class='bx bx-folder'></i></span>
+        <span class="card-title">${escapeHtml(f.name)}</span>
+      </div>
+      <div class="card-right">
+        <span class="card-meta">folder</span>
+      </div>
+    `;
     card.addEventListener('click', () => {
       pathStack.push({
         id: f.id,
@@ -105,19 +114,22 @@ function renderItems(items, skipCache = false) {
     });
     grid.appendChild(card);
   });
+
   files.forEach(f => {
     const typeLabel = f.mimeType ? f.mimeType.split('/').pop() : '';
-    const card = document.createElement('div');
+    const card = document.createElement('button');
     card.className = 'card';
+    card.type = 'button';
     card.innerHTML = `
-  <div class="card-top">
-    <div class="card-icon"><i class='bx bx-book'></i></div>
-    <div>
-      <div class="card-title">${escapeHtml(f.name)}</div>
-      <div class="card-meta">${escapeHtml(typeLabel)}</div>
-    </div>
-  </div>
-`;
+      <div class="card-left">
+        <span class="card-index">${String(cardIdx++).padStart(2, '0')}</span>
+        <span class="card-icon"><i class='bx bx-book'></i></span>
+        <span class="card-title">${escapeHtml(f.name)}</span>
+      </div>
+      <div class="card-right">
+        <span class="card-meta">${escapeHtml(typeLabel)}</span>
+      </div>
+    `;
     card.addEventListener('click', () => openPreview(f));
     grid.appendChild(card);
   });
@@ -126,6 +138,7 @@ function renderItems(items, skipCache = false) {
 async function goToCurrent() {
   const current = pathStack[pathStack.length - 1];
   renderBreadcrumb();
+  if (libraryStatus) libraryStatus.textContent = 'loading index';
   const items = await fetchFolderContents(current.id);
 
   const sortedItems = items.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
@@ -146,13 +159,16 @@ btnUp.addEventListener('click', () => {
 homeBtn.addEventListener('click', () => {
   pathStack = [{
     id: ROOT_FOLDER_ID,
-    name: 'Library'
+    name: 'library'
   }];
   goToCurrent();
 });
 
 function initTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'light';
+  let savedTheme = localStorage.getItem('thekzbn-theme') || localStorage.getItem('theme');
+  if (!savedTheme) {
+    savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeIcon(savedTheme);
 }
@@ -166,7 +182,7 @@ themeToggle.addEventListener('click', () => {
   const currentTheme = document.documentElement.getAttribute('data-theme');
   const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
+  localStorage.setItem('thekzbn-theme', newTheme);
   updateThemeIcon(newTheme);
 });
 
@@ -205,6 +221,15 @@ closeModalBtn.addEventListener('click', closeModal);
 backdrop.addEventListener('click', (e) => {
   if (e.target === backdrop) closeModal();
 });
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && backdrop.getAttribute('aria-hidden') === 'false') closeModal();
+});
+
+function updateLibraryStatus(count) {
+  if (!libraryStatus) return;
+  const label = count === 1 ? 'entry' : 'entries';
+  libraryStatus.textContent = `${count} ${label} in current shelf`;
+}
 
 function escapeHtml(s) {
   return (s || '').replace(/[&<>"']/g, c => ({
